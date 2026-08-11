@@ -1,0 +1,2 @@
+Place your resume PDF here as: resume.pdf
+The download link in the portfolio points to /resume.pdf

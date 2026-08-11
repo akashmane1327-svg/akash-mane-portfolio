@@ -1,0 +1,589 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ─── Theme: Graphite + Copper (the only theme) ──────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --background:      #121212;
+  --section-bg:       #181818;
+  --card:             #1F1F1F;
+  --card-elevated:    #252525;
+
+  --text-primary:     #F2F2F2;
+  --text-secondary:   #B8B8B8;
+
+  --copper:           #B46A3C;
+  --copper-hover:     #C98252;
+
+  --border:           rgba(255,255,255,.08);
+  --border-hover:     rgba(180,106,60,.45);
+  --divider:          rgba(255,255,255,.05);
+  --shadow:           rgba(0,0,0,.45);
+  --copper-glow:      rgba(180,106,60,.35);
+
+  /* Back-compat aliases used by a few components */
+  --surface:          var(--card);
+  --surface-2:        var(--card-elevated);
+  --card-hover:        var(--card-elevated);
+  --accent:           var(--copper);
+  --accent-hover:     var(--copper-hover);
+  --accent-glow:      var(--copper-glow);
+  --muted:            #6E6E6E;
+
+  /* Premium typography — self-hosted via @fontsource (see layout.tsx) */
+  --font-heading: 'Space Grotesk', 'Satoshi', sans-serif;
+  --font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+
+  /* Navbar height token — kept in sync with header height in Navbar.tsx */
+  --nav-h: 61px;
+
+  color-scheme: dark;
+}
+
+/* ─── Reset ────────────────────────────────────────────────────────────────── */
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-h) + 16px);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  position: relative;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), 'Satoshi', sans-serif;
+}
+
+/* ─── Fine film grain (texture, not decoration) ─────────────────────────────  */
+.grain-layer {
+  position: fixed;
+  inset: -10%;
+  width: 120%;
+  height: 120%;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 9s steps(8) infinite;
+}
+
+/* ─── Soft vignette + graphite ambient lighting ─────────────────────────────  */
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(180,106,60,0.06) 0%, transparent 55%),
+    radial-gradient(80% 60% at 85% 110%, rgba(180,106,60,0.045) 0%, transparent 60%),
+    radial-gradient(140% 100% at 50% 50%, transparent 55%, rgba(0,0,0,0.55) 100%);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────────────────── */
+* { scrollbar-color: var(--copper) var(--section-bg); scrollbar-width: thin; }
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: var(--section-bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--copper);
+  border-radius: 999px;
+  border: 2px solid var(--section-bg);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--copper-hover); }
+
+/* ─── Selection ──────────────────────────────────────────────────────────────  */
+::selection { background: var(--copper-glow); color: var(--text-primary); }
+
+/* ─── Focus ──────────────────────────────────────────────────────────────────  */
+:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ─── Custom cursor (desktop, fine-pointer only) ────────────────────────────  */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button {
+    cursor: none;
+  }
+}
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  pointer-events: none;
+  will-change: transform;
+  transform: translate(-50%, -50%);
+}
+.cursor-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--copper);
+}
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--copper);
+  transition: width .25s ease, height .25s ease, opacity .25s ease, border-color .25s ease;
+  opacity: 0.85;
+}
+.cursor-ring.is-active {
+  width: 52px;
+  height: 52px;
+  border-color: var(--copper-hover);
+  background: var(--copper-glow);
+}
+
+/* ─── Luxury loading screen ──────────────────────────────────────────────────  */
+.loader-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  transition: opacity .6s ease, visibility .6s ease;
+}
+.loader-screen[data-hidden='true'] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-mark {
+  font-family: var(--font-heading), 'Satoshi', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+.loader-mark span { color: var(--copper); }
+.loader-line {
+  position: relative;
+  margin-top: 1.5rem;
+  height: 2px;
+  width: min(220px, 40vw);
+  background: var(--border);
+  overflow: hidden;
+  border-radius: 999px;
+}
+.loader-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--copper), var(--copper-hover), transparent);
+  animation: loaderSweep 1.1s ease-in-out infinite;
+  border-radius: 999px;
+}
+@keyframes loaderSweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* ─── Ambient grid ───────────────────────────────────────────────────────────  */
+.ambient-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.25) 10%, rgba(0,0,0,0.25) 90%, transparent);
+}
+
+/* ─── Orbs (soft copper ambient lighting, not colour decoration) ────────────  */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  pointer-events: none;
+}
+.orb-1 {
+  width: min(480px,54vw); height: min(480px,54vw);
+  top: -8%; left: -12%;
+  background: rgba(180,106,60,0.05);
+  animation: pulseGlow 9s ease-in-out infinite;
+}
+.orb-2 {
+  width: min(400px,46vw); height: min(400px,46vw);
+  top: 25%; right: -10%;
+  background: rgba(255,255,255,0.014);
+  animation: pulseGlow 12s ease-in-out infinite 3s;
+}
+.orb-3 {
+  width: min(340px,40vw); height: min(340px,40vw);
+  bottom: 12%; left: 8%;
+  background: rgba(180,106,60,0.035);
+  animation: pulseGlow 14s ease-in-out infinite 5s;
+}
+
+/* ─── Orbit System ───────────────────────────────────────────────────────────  */
+.orbit-system { transform-style: preserve-3d; position: relative; }
+.orbit-ring {
+  position: absolute; inset: 0;
+  border-radius: 9999px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.orbit-ring::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.orbit-ring-outer  { animation: orbitCW 34s linear infinite; }
+.orbit-ring-middle { animation: orbitCCW 26s linear infinite; }
+.orbit-ring-inner  { animation: orbitCW 18s linear infinite; }
+.orbit-ring-outer  .orbit-chip { animation: orbitCCW 34s linear infinite; }
+.orbit-ring-middle .orbit-chip { animation: orbitCW 26s linear infinite; }
+.orbit-ring-inner  .orbit-chip { animation: orbitCCW 18s linear infinite; }
+.orbit-chip {
+  position: absolute;
+  transform: translate(-50%,-50%);
+  transform-origin: center;
+  will-change: transform;
+}
+.orbit-paused { animation-play-state: paused !important; }
+
+/* ─── Keyframes ──────────────────────────────────────────────────────────────  */
+@keyframes orbitCW   { from{transform:rotate(0deg)}   to{transform:rotate(360deg)} }
+@keyframes orbitCCW  { from{transform:rotate(360deg)} to{transform:rotate(0deg)} }
+@keyframes pulseGlow { 0%,100%{opacity:.75;transform:scale(1)} 50%{opacity:1;transform:scale(1.04)} }
+@keyframes float     { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes shimmer   { 0%{background-position:-200% center} 100%{background-position:200% center} }
+@keyframes slideRight{ 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+@keyframes glowPulse { 0%,100%{opacity:.6} 50%{opacity:1} }
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10%      { transform: translate(-2%, -3%); }
+  20%      { transform: translate(-4%, 2%); }
+  30%      { transform: translate(2%, -4%); }
+  40%      { transform: translate(-2%, 5%); }
+  50%      { transform: translate(-4%, 2%); }
+  60%      { transform: translate(3%, 0); }
+  70%      { transform: translate(0, 3%); }
+  80%      { transform: translate(-3%, 0); }
+  90%      { transform: translate(2%, 2%); }
+}
+
+/* ─── Card ────────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px var(--shadow);
+  transition: border-color .3s ease, background-color .3s ease,
+              transform .3s ease, box-shadow .3s ease;
+}
+.card:hover {
+  border-color: var(--border-hover);
+  background: var(--card-elevated);
+  box-shadow: 0 20px 56px var(--shadow), 0 0 0 1px var(--border-hover);
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Glass variant — for overlays, floating nav, hero panel */
+.card-glass {
+  background: rgba(31,31,31,0.55);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ─── Section ─────────────────────────────────────────────────────────────── */
+.section {
+  padding-top: clamp(4.25rem, 7.2vw, 7.5rem);
+  padding-bottom: clamp(4.25rem, 7.2vw, 7.5rem);
+  scroll-margin-top: calc(var(--nav-h) + 16px);
+}
+
+/* ─── Section alt background — the true "SECTION BACKGROUND" tone ──────────── */
+.section-bg-alt {
+  background: var(--section-bg);
+  border-top: 1px solid var(--divider);
+  border-bottom: 1px solid var(--divider);
+}
+
+/* ─── Typography ──────────────────────────────────────────────────────────── */
+.text-display {
+  font-family: var(--font-heading), 'Satoshi', sans-serif;
+  font-size: clamp(2.5rem, 5vw + 0.8rem, 5.25rem);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.text-section-title {
+  font-family: var(--font-heading), 'Satoshi', sans-serif;
+  font-size: clamp(1.85rem, 3vw + 0.4rem, 2.85rem);
+  font-weight: 600;
+  line-height: 1.16;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+}
+.text-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--copper);
+  font-family: var(--font-mono), monospace;
+}
+.text-gradient {
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.font-code {
+  font-family: var(--font-mono), 'Fira Code', 'Cascadia Code', ui-monospace, 'SFMono-Regular', monospace;
+}
+
+/* ─── Animated underline link ────────────────────────────────────────────── */
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--copper);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .35s cubic-bezier(0.4,0,0.2,1);
+}
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* ─── Tilt card (Skills) ─────────────────────────────────────────────────── */
+.tilt-card {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 220px at var(--mx,50%) var(--my,50%), var(--copper-glow), transparent 70%);
+  opacity: 0;
+  transition: opacity .3s ease;
+  pointer-events: none;
+}
+.tilt-card:hover .tilt-glow { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ─── Responsive utilities ─────────────────────────────────────────────── */
+@media (max-width: 639px) {
+  .section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+}
+
+@media (max-width: 374px) {
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* ─── Premium Button System ──────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Primary — the signature copper button, used for key CTAs */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  min-height: 44px;
+  border: 1px solid var(--copper);
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--card);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.875rem;
+  isolation: isolate;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 2px 10px var(--shadow);
+  transition: background .35s ease, color .35s ease, border-color .35s ease,
+              box-shadow .35s cubic-bezier(0.34,1.56,0.64,1), transform .25s ease;
+}
+.btn-primary:hover {
+  background: var(--copper);
+  color: #171310;
+  border-color: var(--copper-hover);
+  box-shadow: 0 6px 28px var(--copper-glow), 0 2px 10px var(--shadow);
+}
+.btn-primary:active { transform: scale(0.97); }
+
+/* Cursor-tracking radial glow */
+.btn-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle 70px at var(--x,50%) var(--y,50%), rgba(255,255,255,0.22) 0%, transparent 80%);
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.btn-primary:hover .btn-glow { opacity: 1; }
+
+/* Sliding shimmer */
+.btn-slide {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform .55s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: none;
+  z-index: 2;
+}
+.btn-primary:hover .btn-slide { transform: translateX(100%); }
+
+/* Ripple on click */
+.btn-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  transform: scale(0);
+  animation: rippleAnim .6s ease-out forwards;
+  pointer-events: none;
+  z-index: 3;
+}
+@keyframes rippleAnim {
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* Secondary — outline / ghost button */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: border-color .3s ease, color .3s ease, background-color .3s ease, transform .25s ease;
+}
+.btn-outline:hover {
+  border-color: var(--copper);
+  color: var(--copper-hover);
+  background: rgba(180,106,60,0.06);
+}
+.btn-outline:active { transform: scale(0.97); }
+
+/* ─── Floating-label form field ──────────────────────────────────────────── */
+.field {
+  position: relative;
+  width: 100%;
+}
+.field input,
+.field textarea {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text-primary);
+  padding: 1.3rem 1rem 0.6rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+.field textarea { min-height: 128px; resize: vertical; }
+.field input:focus,
+.field textarea:focus {
+  border-color: var(--copper);
+  box-shadow: 0 0 0 3px var(--copper-glow);
+  background: var(--card-elevated);
+}
+.field label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform .2s ease, color .2s ease, top .2s ease;
+}
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label,
+.field textarea:focus + label,
+.field textarea:not(:placeholder-shown) + label {
+  transform: translateY(-0.55rem) scale(0.72);
+  color: var(--copper);
+  top: 0.55rem;
+}
+.field.has-error input,
+.field.has-error textarea {
+  border-color: var(--copper-hover);
+  box-shadow: 0 0 0 3px var(--copper-glow);
+}
+
+/* ─── Reduced Motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .orbit-ring,.orbit-chip { animation: none !important; }
+  .grain-layer { display: none; }
+  .cursor-dot, .cursor-ring { display: none; }
+  .card:hover { transform: none !important; }
+}
+
+/* ─── Mobile orbit slower ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .orbit-ring-outer  { animation-duration: 44s; }
+  .orbit-ring-middle { animation-duration: 32s; }
+  .orbit-ring-inner  { animation-duration: 22s; }
+  .orbit-ring-outer  .orbit-chip { animation-duration: 44s; }
+  .orbit-ring-middle .orbit-chip { animation-duration: 32s; }
+  .orbit-ring-inner  .orbit-chip { animation-duration: 22s; }
+}
+
+/* ─── Touch devices: never hide the native cursor ───────────────────────── */
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot, .cursor-ring { display: none !important; }
+}
