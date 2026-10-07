@@ -1,12 +1,11 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { Mail, MapPin, Github, Linkedin } from 'lucide-react';
+import { Mail, MapPin, Github, Linkedin, FileText } from 'lucide-react';
 import { MotionReveal } from '@/components/MotionReveal';
 import { SectionHeading } from '@/components/SectionHeading';
 import { PrimaryLink } from '@/components/Button';
 import { site } from '@/data/site';
-import { downloadResume } from '@/utils/resume';
 
 export function ContactSection() {
   const shouldReduce = useReducedMotion();
@@ -104,14 +103,16 @@ export function ContactSection() {
                     >
                       Email Me
                     </PrimaryLink>
-                    <button
-                      type="button"
-                      onClick={downloadResume}
-                      className="btn-outline w-full sm:w-auto"
-                      aria-label="Download resume"
+                    <a
+                      href={site.resume}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-outline w-full sm:w-auto inline-flex items-center justify-center gap-2"
+                      aria-label="View resume"
                     >
-                      Download Resume
-                    </button>
+                      <FileText size={14} />
+                      View Resume
+                    </a>
                   </div>
                 </div>
               </div>

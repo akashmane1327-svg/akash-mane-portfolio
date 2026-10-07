@@ -117,44 +117,6 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 6px;
 }
 
-/* ─── Custom cursor (desktop, fine-pointer only) ────────────────────────────  */
-@media (hover: hover) and (pointer: fine) {
-  html.has-custom-cursor,
-  html.has-custom-cursor a,
-  html.has-custom-cursor button {
-    cursor: none;
-  }
-}
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 300;
-  pointer-events: none;
-  will-change: transform;
-  transform: translate(-50%, -50%);
-}
-.cursor-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--copper);
-}
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1.5px solid var(--copper);
-  transition: width .25s ease, height .25s ease, opacity .25s ease, border-color .25s ease;
-  opacity: 0.85;
-}
-.cursor-ring.is-active {
-  width: 52px;
-  height: 52px;
-  border-color: var(--copper-hover);
-  background: var(--copper-glow);
-}
 
 /* ─── Luxury loading screen ──────────────────────────────────────────────────  */
 .loader-screen {
@@ -569,7 +531,6 @@ h1, h2, h3, h4, h5, h6 {
   }
   .orbit-ring,.orbit-chip { animation: none !important; }
   .grain-layer { display: none; }
-  .cursor-dot, .cursor-ring { display: none; }
   .card:hover { transform: none !important; }
 }
 
@@ -583,7 +544,4 @@ h1, h2, h3, h4, h5, h6 {
   .orbit-ring-inner  .orbit-chip { animation-duration: 22s; }
 }
 
-/* ─── Touch devices: never hide the native cursor ───────────────────────── */
-@media (hover: none), (pointer: coarse) {
-  .cursor-dot, .cursor-ring { display: none !important; }
-}
+

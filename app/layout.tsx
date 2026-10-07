@@ -11,7 +11,6 @@ import '@fontsource/jetbrains-mono/500.css';
 import '@fontsource/jetbrains-mono/600.css';
 import './globals.css';
 import { Loader } from '@/components/Loader';
-import { CustomCursor } from '@/components/CustomCursor';
 
 export const metadata: Metadata = {
   title: 'Akash Mane | Full Stack Developer',
@@ -57,7 +56,6 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body>
         <Loader />
-        <CustomCursor />
         <div className="grain-layer" aria-hidden="true" />
         <div className="vignette" aria-hidden="true" />
         {children}

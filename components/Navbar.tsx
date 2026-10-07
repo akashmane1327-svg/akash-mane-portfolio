@@ -7,7 +7,6 @@ import { useScrollProgress } from '@/hooks/useScrollProgress';
 import { useActiveSection } from '@/hooks/useActiveSection';
 import { site } from '@/data/site';
 import { Magnetic } from '@/components/Magnetic';
-import { downloadResume } from '@/utils/resume';
 
 const NAV_LINKS = [
   { label: 'Home', id: 'home' },
@@ -185,15 +184,16 @@ export function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden items-center gap-3 md:flex">
-            <button
-              type="button"
-              onClick={downloadResume}
+            <a
+              href={site.resume}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--border)] px-3.5 py-2 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--copper)] hover:text-[var(--text-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--copper)] focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--background)]"
-              aria-label="Download resume"
+              aria-label="View resume"
             >
               <FileText size={14} />
               Resume
-            </button>
+            </a>
             <LetsTalkButton onClick={() => scrollTo('contact')} />
           </div>
 
@@ -273,9 +273,10 @@ export function Navbar() {
                   rel="noopener noreferrer"
                   onClick={() => setOpen(false)}
                   className="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--copper)] hover:text-[var(--text-primary)]"
+                  aria-label="View resume"
                 >
                   <FileText size={14} />
-                  Download Resume
+                  Resume
                 </a>
                 <button type="button" onClick={() => scrollTo('contact')} className="btn-primary justify-center">
                   <span className="btn-glow" aria-hidden="true" />

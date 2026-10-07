@@ -18,7 +18,7 @@ export const site = {
 
   stats: [
     { value: '1+', label: 'Year Experience' },
-    { value: '4', label: 'Projects Completed' },
+    { value: '5+', label: 'Projects Completed' },
     { value: '5+', label: 'Core Technologies' },
     { value: '100%', label: 'Client Satisfaction' },
   ],
@@ -48,38 +48,72 @@ export const site = {
 
   projects: [
     {
+      title: 'Wheels Auctions',
+      description:
+        'Full-stack vehicle auction management platform featuring comprehensive vehicle listings, vendor and auction management, real-time bidding workflows, and master-data administration.',
+      tags: ['React.js', 'Django', 'Django REST Framework', 'MySQL', 'JWT Auth', 'REST API'],
+      features: [
+        'Vehicle, vendor, auction & bidding management',
+        'Secure JWT-based authentication & authorization',
+        'RESTful APIs integrated with responsive React UI',
+        'MySQL database schema design & optimized CRUD operations',
+        'Master-data management and production deployment',
+      ],
+      featured: true,
+      category: 'Full Stack',
+      github: undefined, // Private Git repository
+      live: 'https://wheelsauctions.yourhrms.in/',
+    },
+    {
+      title: 'Ghar Story',
+      description:
+        'Responsive real estate platform featuring property listings, dynamic search & filtering, favorites, client stories, and interactive WhatsApp/call contact integrations.',
+      tags: ['React.js', 'JavaScript', 'HTML5', 'CSS3', 'Vercel', 'Git'],
+      features: [
+        'Property listings with search & dynamic filtering',
+        'Favorites collection & client story testimonials',
+        'Reusable React UI components with responsive layout',
+        'Interactive WhatsApp and direct phone contact features',
+        'Production deployment on Vercel with custom domain',
+      ],
+      featured: true,
+      category: 'Frontend',
+      github: undefined,
+      live: 'https://www.ghar-story.com/',
+    },
+    {
       title: 'Hospital Management System',
       description:
-        'Comprehensive full-stack healthcare platform handling patient registration, appointment scheduling, billing workflows, doctor management, and detailed analytics dashboards.',
-      tags: ['Django', 'React', 'PostgreSQL', 'Python', 'REST API', 'TypeScript'],
+        'Comprehensive full-stack healthcare platform (HMS) implementing the complete IPD patient lifecycle from admission to discharge, with ward/bed allocation and real-time tracking.',
+      tags: ['Django REST Framework', 'React.js', 'MySQL', 'Python', 'REST API'],
       features: [
-        'Patient registration & records',
-        'Appointment booking system',
-        'Billing & invoice management',
-        'Doctor & staff management',
-        'Analytics & reporting dashboard',
+        'Complete IPD patient lifecycle management',
+        'Floor, ward, room & bed management modules',
+        'Real-time bed availability & admission workflows',
+        'Doctor & staff role-based dashboards',
+        'Automated hospital workflows & billing',
       ],
       featured: true,
       category: 'Full Stack',
       github: undefined,
-      live: undefined,
+      live: 'http://hims.yourhrms.in/',
     },
     {
       title: 'Human Resource Management System',
       description:
-        'Enterprise-grade HR platform that streamlines the complete employee lifecycle — from onboarding to payroll processing, leave management, and performance reviews.',
-      tags: ['Django', 'Python', 'MySQL', 'REST API', 'Django REST Framework'],
+        'Enterprise-grade HRMS platform handling recruitment, onboarding, asset tracking, expense management, exit workflows, and multi-level hierarchy approvals.',
+      tags: ['Django REST Framework', 'React.js', 'MySQL', 'Python', 'REST API'],
       features: [
-        'Employee onboarding & management',
-        'Attendance tracking',
-        'Payroll processing',
-        'Leave management system',
-        'Performance tracking & appraisals',
+        'Recruitment & employee onboarding pipelines',
+        'Multi-level approval workflows & hierarchy',
+        'Asset management & expense tracking',
+        'Exit management & clearance processing',
+        'Automated email notifications & reporting dashboards',
       ],
       featured: false,
       category: 'Full Stack',
       github: undefined,
-      live: undefined,
+      live: 'https://yourhrms.com/',
     },
     {
       title: 'Developer Portfolio',
@@ -96,18 +130,18 @@ export const site = {
       featured: false,
       category: 'Frontend',
       github: 'https://github.com/akashmane2000-hub',
-      live: undefined,
+      live: 'https://akash-mane-portfolio.vercel.app/',
     },
   ] satisfies Project[],
 
   experience: [
     {
-      role: 'WordPress Web Developer Intern',
+      role: 'Web Developer Intern',
       company: '',
       period: '2024 – 2025',
       type: 'work',
       summary:
-        'Worked as a WordPress Web Developer Intern developing and maintaining websites, customizing existing websites, fixing bugs, improving performance, and delivering responsive web solutions.',
+        'Worked as a Web Developer Intern developing and maintaining websites, customizing existing websites, fixing bugs, improving performance, and delivering responsive web solutions.',
       highlights: [],
     },
     {

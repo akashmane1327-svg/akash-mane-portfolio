@@ -2,7 +2,6 @@
 
 import { Github, Linkedin, Mail, ArrowUp, Heart } from 'lucide-react';
 import { site } from '@/data/site';
-import { downloadResume } from '@/utils/resume';
 
 const NAV = ['About', 'Skills', 'Projects', 'Experience', 'Contact'];
 
@@ -104,13 +103,14 @@ export function Footer() {
               </li>
               <li className="text-sm text-[var(--text-secondary)]">{site.location}</li>
               <li>
-                <button
-                  type="button"
-                  onClick={downloadResume}
+                <a
+                  href={site.resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="link-underline text-sm text-[var(--text-secondary)] transition hover:text-[var(--text-primary)]"
                 >
-                  Download Resume
-                </button>
+                  View Resume
+                </a>
               </li>
             </ul>
           </div>

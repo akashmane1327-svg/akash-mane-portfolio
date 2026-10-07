@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   TerminalSquare,
   Paintbrush2,
-  Download,
+  FileText,
   Sparkles,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -21,7 +21,6 @@ import { site } from '@/data/site';
 import { TextReveal } from '@/components/TextReveal';
 import { PrimaryLink } from '@/components/Button';
 import { AnimatedCounter } from '@/components/AnimatedCounter';
-import { downloadResume } from '@/utils/resume';
 
 const orbitSkills = {
   outer: [
@@ -191,15 +190,16 @@ export function HeroSection() {
               View My Work
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
             </PrimaryLink>
-            <button
-              type="button"
-              onClick={downloadResume}
+            <a
+              href={site.resume}
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-outline inline-flex items-center gap-2"
-              aria-label="Download resume"
+              aria-label="View resume"
             >
-              <Download size={14} />
+              <FileText size={14} />
               Resume
-            </button>
+            </a>
           </motion.div>
 
           {/* Social + location */}
